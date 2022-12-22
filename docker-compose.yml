@@ -1,0 +1,44 @@
+version: '3.3'
+
+services:
+  api:
+    image: node:16-slim
+    container_name: ${COMPOSE_PROJECT_NAME}_api
+    depends_on:
+      - db
+    ports:
+      - 5100:5000
+    volumes:
+      - ./api:/app/default/api
+    working_dir: /app/default/api
+    environment:
+      - APP_WORK=/app/default/api
+    command: /app/default/api/dev.sh
+  web:
+    image: node:16-slim
+    container_name: ${COMPOSE_PROJECT_NAME}_web
+    ports:
+      - 3100:3000
+    volumes:
+      - ./web:/app/default
+    working_dir: /app/default
+    environment:
+      - APP_WORK=/app/default
+      - HOST=0.0.0.0
+      - PORT=3000
+    command: /app/default/dev.sh
+  db:
+    image: postgres:15
+    container_name: ${COMPOSE_PROJECT_NAME}_db
+    ports:
+      - 5434:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=default
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./db/entrypoint:/docker-entrypoint-initdb.d
+  volumes:
+    db:
+      driver: local
