@@ -2,20 +2,20 @@ version: '3.3'
 
 services:
   api:
-    image: node:16-slim
+    image: node:18.12.1
     container_name: ${COMPOSE_PROJECT_NAME}_api
     depends_on:
       - db
     ports:
       - 5100:5000
     volumes:
-      - ./api:/app/default/api
-    working_dir: /app/default/api
+      - ./api:/app/default
+    working_dir: /app/default
     environment:
-      - APP_WORK=/app/default/api
-    command: /app/default/api/dev.sh
+      - APP_WORK=/app/default
+    command: npm install && npm run start
   web:
-    image: node:16-slim
+    image: node:18.12.1
     container_name: ${COMPOSE_PROJECT_NAME}_web
     ports:
       - 3100:3000
@@ -39,6 +39,6 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
       - ./db/entrypoint:/docker-entrypoint-initdb.d
-  volumes:
-    db:
-      driver: local
+volumes:
+  db:
+    driver: local

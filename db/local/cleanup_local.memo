@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+#docker exec omoriya_db gosu postgres pg_dump --dbname default --column-inserts --data-only --schema=public > local.dump
+#./init.sh
+#cat local.dump | docker exec -i omoriya_db gosu postgres psql --dbname default
+
+exit 0
